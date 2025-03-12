@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 from core.config import config
 from db.elasticsearch import init_elastic
 from db.redis import init_redis
-from api.v1 import films
+from api.v1 import films_api
 logger.debug(f"Config ENV: {config.dict()}")
 
 
@@ -41,7 +41,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.include_router(films.router, prefix='/api/v1/films', tags=['films']) 
+app.include_router(films_api.router, prefix='/api/v1/films', tags=['films']) 
 
 
 if __name__ == "__main__":
