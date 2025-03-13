@@ -13,8 +13,7 @@ logger = logging.getLogger(__name__)
 from core.config import config
 from db.elasticsearch import init_elastic
 from db.redis import init_redis
-from api.v1 import films_api
-logger.debug(f"Config ENV: {config.dict()}")
+from api.v1 import films_api, genres_api
 
 
 async def lifespan(app: FastAPI) -> AsyncGenerator[dict, None]:
@@ -26,7 +25,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[dict, None]:
     app.state.redis = redis
     app.state.es = es
 
-    yield  # Передаём управление FastAPI
+    yield
 
     await redis.close()
     await es.close()
@@ -42,6 +41,7 @@ app = FastAPI(
 )
 
 app.include_router(films_api.router, prefix='/api/v1/films', tags=['films']) 
+app.include_router(genres_api.router, prefix='/api/v1/genres', tags=['genres'])
 
 
 if __name__ == "__main__":

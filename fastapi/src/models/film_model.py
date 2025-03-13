@@ -1,17 +1,9 @@
 from typing import List, Optional
+
 from pydantic import BaseModel, Field
 
-
-class Person(BaseModel):
-    """Модель персоны (актёра, режиссёра, сценариста)."""
-    uuid: str = Field(alias="id")
-    full_name: str = Field(alias="name")
-
-class Genre(BaseModel):
-    """Модель жанра фильма."""
-    uuid: str = Field(alias="id")
-    name: str
-
+from models.genre_model import Genre
+from models.person_model import Person
 
 class FilmResponseModel(BaseModel):
     """Модель ответа API для фильма."""

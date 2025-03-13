@@ -21,24 +21,17 @@ async def get_films_list(
     """
     return await film_service.get_films_list(sort, genre, page_number, page_size)
 
-
-@router.get('/films', response_model=List[FilmSearchResponseModel])
-async def get_films(
-    sort: Optional[List[str]] = Query(None, description="Sorting fields, e.g. '-imdb_rating'"),
-    genre: Optional[str] = Query(None, description="Filter by genre"),
+@router.get("/search", response_model=List[FilmSearchResponseModel])
+async def search_films(
+    query: str = Query(..., description="Search query"),
     page_number: int = Query(1, ge=1, description="Page number"),
     page_size: int = Query(50, ge=1, le=100, description="Page size"),
     film_service: FilmService = Depends(get_film_service)
 ) -> List[FilmSearchResponseModel]:
     """
-    Получить список фильмов с фильтрацией и множественной сортировкой.
-
-    - `sort`: список полей для сортировки. Пример: `["-imdb_rating", "title"]`
-    - `genre`: фильтрация по жанру (название жанра)
-    - `page_number`: номер страницы
-    - `page_size`: количество записей на странице
+    Поиск фильмов по названию и описанию.
     """
-    return await film_service.get_films_list(sort, genre, page_number, page_size)
+    return await film_service.search(query, page_number, page_size)
 
 
 @router.get('/{film_id}', response_model=FilmResponseModel)
